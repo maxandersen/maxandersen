@@ -17,7 +17,7 @@ jobs:
       - name: Setup JBang
         uses: jbangdev/setup-jbang@v0.1.0
       - name: Run update script
-        run: jbang update.java
+        run: jbang --verbose update.java
         env:
           JBANG_REPO: /root/.jbang/repository
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
