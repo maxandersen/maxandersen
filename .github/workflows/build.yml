@@ -16,16 +16,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup JBang
         uses: jbangdev/setup-jbang@v0.1.0
-      - name: version info
-        run: jbang version --verbose
-      - name: dump env
-        run: jbang env@jbangdev || true
       - name: Run update script
-        run: jbang --verbose update.java
+        run: jbang update.java
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit README and push
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           add: readme.adoc
           default_author: github_actions
