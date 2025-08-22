@@ -48,8 +48,3 @@ Once upon a time, in a world not too distant from our own, a great invention was
 +
 https://xam.dk/blog/emporors-new-clothes/[Read further^]
 
-Quarkus & Red Hat's evolving middleware strategy (2025-03-13)::
-Over the past weeks, we’ve received questions about the https://www.redhat.com/en/blog/evolving-our-middleware-strategy[recent announcement] that Red Hat’s Middleware engineering and product teams, which include Quarkus, are moving to IBM....
-+
-https://quarkus.io/blog/quarkus-redhat-strategy/[Read further^]
-
