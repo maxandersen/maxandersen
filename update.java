@@ -1,6 +1,7 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
+//JAVA 21+
 //REPOS mavencentral,jitpack
-//DEPS io.quarkus:quarkus-bom:${quarkus.version:3.25.0}@pom
+//DEPS io.quarkus:quarkus-bom:${quarkus.version:3.39.0}@pom
 //DEPS io.quarkus:quarkus-qute
 //DEPS com.apptasticsoftware:rssreader:3.9.3
 //DEPS io.github.furstenheim:copy_down:1.1
@@ -10,7 +11,8 @@
 //DEPS io.quarkus:quarkus-rest-client
 //DEPS io.quarkus:quarkus-rest-client-jackson
 
-//JAVA 21+
+// ponytail: workaround for https://github.com/quarkusio/quarkus/issues/56160, remove when fixed
+//JAVA_OPTIONS -Djdk.xml.maxGeneralEntitySizeLimit=0 -Djdk.xml.totalEntitySizeLimit=0 --add-opens java.base/java.lang=ALL-UNNAMED
 
 import com.apptasticsoftware.rssreader.Item;
 import com.apptasticsoftware.rssreader.RssReader;
@@ -66,7 +68,7 @@ public class update implements QuarkusApplication {
         sorted.addAll(rssFeed.limit(3).collect(Collectors.toList()));
 
         sorted.addAll(reader.read("https://quarkus.io/feed.xml")
-                        .filter(p->p.getAuthor().get().contains("/maxandersen")).limit(3)
+                        .filter(p->p.getAuthor().map(a -> a.contains("/maxandersen")).orElse(false)).limit(3)
                         .map(p->{return extracted(p);})
                         .collect(Collectors.toList()));
  
@@ -79,6 +81,7 @@ public class update implements QuarkusApplication {
         return 0;
     }
     private Item extracted(Item p) {
+        if (p.getDescription().isEmpty()) return p;
         p.setDescription(Converter.convertMarkdownToAsciiDoc(new CopyDown().convert(p.getDescription().get())));
         
         p.setDescription(p.getDescription().get().substring(0, p.getDescription().get().indexOf("\n")));
