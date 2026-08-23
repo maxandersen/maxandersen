@@ -28,23 +28,33 @@ Max also co-hosts the weekly video podcast called https://quarkus.io/insights[Qu
 
 ## ✍️ Most recent blog posts
 
-Illusion of Hype (2025-06-09)::
-Apple&#8217;s recent paper, The Illusion of Thinking, has sparked a wave of discussions both online and offline. Some have latched onto it as a definitive "gotcha" moment against large language models (LLMs), claiming they&#8217;re nothing but fancy statistical engines that can&#8217;t truly reason. But here’s the thing: we already should know that. Anyone who’s spent time digging into how LLMs work knows they’re built from neural networks, statistics, and sheer compute horsepower. There’s no magic “thinking” happening under the hood, no matter how many times a CEO stands on a stage and calls them “intelligent.” And yet — that doesn’t make them any less impressive or useful....
+A Coding Agent in 260 Lines of Java (2026-04-08)::
+A friend of mine pointed me to nanocode, and i found an article going about building an AI coding agent in 250 lines of Python. The original nanocode project is a cool demo: a minimal Claude Code alternative using just the OpenRouter API or Anthropic API, tool definitions, and a loop. No frameworks, no magic. I thought: Java can do this just as cleanly. So I ported it....
 +
-https://xam.dk/blog/illusion-of-hype/[Read further^]
+https://xam.dk/blog/nanocode-coding-agent-in-260-lines-of-java/[Read further^]
+
+Announcing TamboUI (2026-02-18)::
+This blog post is co-authored by Cédric Champeau (Micronaut) and Max Rydahl Andersen (Quarkus), and cross-posted on our respective personal blogs. Today we are excited to announce TamboUI, an open-source Terminal UI framework for the Java ecosystem!...
++
+https://xam.dk/blog/announcing-tamboui/[Read further^]
+
+2026: The Year of Java in the Terminal (2026-12-30)::
+Look, I&#8217;m going to say something that might sound crazy to some of you: Java deserves to be better in the terminal. And 2026? That&#8217;s going to be the year we fix it! I&#8217;ve been watching people get absolutely amazed by AI terminal applications lately. LLM-powered CLI tools that help you write code, answer questions, generate content—all from your terminal. And you know what they&#8217;re all written in? Python. Rust. Go. Node.js. Everything except Java....
++
+https://xam.dk/blog/lets-make-2026-the-year-of-java-in-the-terminal/[Read further^]
 
 Quarkus MCP Server: The First Java Server SDK to Support Streamable HTTP! (2025-05-23)::
 The Model Context Protocol (MCP) is taking the developer world by storm, and now, with its latest spec update: Streamable HTTP support has arrived!...
 +
 https://quarkus.io/blog/streamable-http-mcp/[Read further^]
 
-Simplifying JDBC Connections with JBang: Introducing the ‘jdbc’ Script (2023-11-01)::
-Introduction Hello, Java enthusiasts! Today, I&#8217;m excited to share a tool that I believe will make your database interactions much simpler. If you&#8217;ve worked with Java databases, you know that setting up JDBC connections can sometimes be a bit cumbersome. That&#8217;s where my JBang script, conveniently named jdbc, comes into play. It&#8217;s designed to streamline the process, making your life as a developer a bit easier....
+Quarkus & Red Hat's evolving middleware strategy (2025-03-13)::
+Over the past weeks, we’ve received questions about the https://www.redhat.com/en/blog/evolving-our-middleware-strategy[recent announcement] that Red Hat’s Middleware engineering and product teams, which include Quarkus, are moving to IBM....
 +
-https://xam.dk/blog/jdbc/[Read further^]
+https://quarkus.io/blog/quarkus-redhat-strategy/[Read further^]
 
-Emperors New Clothes (2024-10-21)::
-Once upon a time, in a world not too distant from our own, a great invention was unveiled: the “Intelligent Machine,” or simply "AI." Its creators promised wonders—unlimited reasoning, flawless decision-making, and the power to revolutionize industries. It was said that this new technology could think like a human, solve problems beyond human capability, and would soon render manual labor, tedious management, and even complex tasks obsolete. The leaders of the world—CEOs, politicians, and influencers—were enchanted. "This is the future," they declared. "AI will guide us to new heights of productivity, efficiency, and innovation." The tech CEOs, drunk on the promise of reducing costs, began to replace workers with AI-powered systems. Programmers were let go, customer support became fully automated, and entire departments were dissolved as the AI took their place. The AI was hailed as the ultimate solution to every problem. Businesses bragged about their "AI-driven" strategies, while governments boasted about using AI to streamline services. Investors poured in their wealth, driving the AI bubble higher and higher. Society was caught in the frenzy, trusting AI to steer the ship, no longer caring to question its methods....
+Introducing Model Context Protocol servers project (2025-01-29)::
+Today, I’m excited to introduce the Model Context Protocol (MCP) servers project....
 +
-https://xam.dk/blog/emporors-new-clothes/[Read further^]
+https://quarkus.io/blog/introducing-mcp-servers/[Read further^]
 
