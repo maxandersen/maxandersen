@@ -28,20 +28,556 @@ Max also co-hosts the weekly video podcast called https://quarkus.io/insights[Qu
 
 ## ✍️ Most recent blog posts
 
+xam.dk ❤️ Quarkus Roq (2026-10-04)::
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>xam.dk is now generated using <a href="https://iamroq.dev">Quarkus Roq</a>, a static site generator built on Java and Quarkus.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_it_took_a_while">Why it took a while</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I had wanted to get off Jekyll for ages. I always felt like a random bet if publishing would work when writing a blog.</p>
+</div>
+<div class="paragraph">
+<p>I already, with Jason&#8217;s help, <code>jbang.dev</code> but had been struggling with getting <code>xam.dk</code> going.</p>
+</div>
+<div class="paragraph">
+<p>Then I watched <a href="https://www.youtube.com/watch?v=0rQ2_UF7N1I">Foojay</a> video about Quarkus Roq and the recent <a href="https://quarkus.io">quarkus.io</a> migration itself — thousands of pages, versioned docs and all.</p>
+</div>
+<div class="paragraph">
+<p>So I gave xam.dk another go. This time I leaned on an LLM, feeding it the <a href="https://iamroq.dev/docs/migrating/">Roq migration guide</a> and the ready-made prompts on that page. Honestly? It more or less did it. Templates converted, content moved, configuration mapped — I mostly reviewed, nudged, and fixed edge cases.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cool_things_i_learned_along_the_way">Cool things I learned along the way</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_no_frontmatter_required">No frontmatter required</h3>
+<div class="paragraph">
+<p>You don&#8217;t need YAML frontmatter anymore when using AsciiDoc!. This very post is <strong>pure AsciiDoc</strong> — the document title and <code>:page-*:</code> attributes in the header are picked up as page metadata directly. No <code>---</code> fences in sight.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_relativize_is_back_via_a_template_method">Relativize is back — via a template method</h3>
+<div class="paragraph">
+<p>My old Jekyll templates used <code>relativize_url</code> almost everywhere so links worked no matter where the site was served. Roq has no direct equivalent, but because it is Qute + Java, I added a tiny <a href="https://github.com/maxandersen/xam.dk/blob/roq-migration/src/main/java/dk/xam/UrlExtensions.java">template extension</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@TemplateExtension
+public class UrlExtensions {
+    public static String rel(Page page, String target) { ... } // Path.relativize under the hood
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So templates can now write <code>{=page.rel('/assets/main.css')}</code> and get a proper <code>../../assets/main.css</code> relative to the current page. Feels awesome I can actually read the code and easily debug it given it is just Java now.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+One gap: this only covers links I control in templates. Relative links <strong>inside</strong> rendered AsciiDoc/Markdown content aren&#8217;t rewritten yet — so in-content image and page references still use absolute paths for now. On TODO list to try handle!
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_old_comments_and_webmentions_preserved">Old comments and webmentions, preserved</h3>
+<div class="paragraph">
+<p>Years ago I had to disable webmentions as the jekyll webmention plugin had issues. Meant old comments were gone from the rendered site - now with LLM, Roq and Qute it was trivial to bring that render back.</p>
+</div>
+<div class="paragraph">
+<p>New comments are no longer possible (the old staticman/webmention services are gone), but every historical comment and webmention is kept and shown read-only. Likes, reposts and mentions render as a compact avatar facepile with counts; replies and comments show in full. The avatars are cached locally so there is no runtime dependency on a third-party service.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_a_good_spring_cleaning">A good spring cleaning</h3>
+<div class="paragraph">
+<p>Migrating was also a chance to delete a lot: dead staticman/recaptcha config, an unused contact form, and piles of theme vendor source files that were never served.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_thanks">Thanks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Thanks to the Roq team — this was genuinely fun and easy to do. If you have a Jekyll site gathering dust, the migration guide plus an LLM is a surprisingly good afternoon.</p>
+</div>
+<div class="paragraph">
+<p>Fun to also spot that <a href="https://xam.dk/blog/first-thought/">First Post</a> here was 24 years ago - here&#8217;s to ~25 year more with xam.dk and Quarkus Roq :)</p>
+</div>
+</div>
+</div><div style="margin-top: 50px; font-style: italic;"><strong><a href="https://xam.dk/blog/migrated-to-quarkus-roq/">Keep reading</a>.</strong></div><br /> <br />...
++
+https://xam.dk/blog/migrated-to-quarkus-roq/[Read further^]
+
 A Coding Agent in 260 Lines of Java (2026-04-08)::
-A friend of mine pointed me to nanocode, and i found an article going about building an AI coding agent in 250 lines of Python. The original nanocode project is a cool demo: a minimal Claude Code alternative using just the OpenRouter API or Anthropic API, tool definitions, and a loop. No frameworks, no magic. I thought: Java can do this just as cleanly. So I ported it....
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A friend of mine pointed me to nanocode, and i found an article going about building <a href="https://levelup.gitconnected.com/build-your-own-ai-coding-agent-in-250-lines-no-dependencies-required-f120860dad0e">an AI coding agent in 250 lines of Python</a>. The original <a href="https://github.com/1rgs/nanocode">nanocode</a> project is a cool demo: a minimal Claude Code alternative using just the OpenRouter API or Anthropic API, tool definitions, and a loop. No frameworks, no magic.</p>
+</div>
+<div class="paragraph">
+<p>I thought: Java can do this just as cleanly. So I ported it.</p>
+</div>
+<div class="paragraph">
+<p>The result? <a href="https://github.com/maxandersen/nanocode">nanocode.java</a> — <strong>261 lines</strong>, one file, runnable with <a href="https://www.jbang.dev">JBang</a>, and one dependency (Jackson for JSON). A fully functional AI coding agent.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/maxandersen/nanocode/raw/master/screenshot.png" alt="nanocode screenshot">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_makes_a_coding_agent">What Makes a Coding Agent?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Strip away the hype and a coding agent is surprisingly simple. It&#8217;s a loop:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Send a prompt and tool definitions to an LLM</p>
+</li>
+<li>
+<p>The LLM either responds with text or asks to use a tool</p>
+</li>
+<li>
+<p>Execute the tool, feed the result back</p>
+</li>
+<li>
+<p>Repeat until the LLM has nothing more to do</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>That&#8217;s it. The "intelligence" is in the LLM. Your code just needs to be the hands and eyes — reading files, writing files, running commands — and relaying results back.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_tools">The Tools</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>nanocode gives the LLM six tools, which turns out to be enough to do real coding work:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Tool</th>
+<th class="tableblock halign-left valign-top">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Read a file with line numbers (with offset/limit for big files)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>write</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Write content to a file</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>edit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replace a string in a file (must be unique match)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>glob</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Find files by pattern, sorted by modification time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grep</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Search files with regex</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bash</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run a shell command</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Technically, you could remove <code>edit</code>, <code>glob</code>, and <code>grep</code> and still have a fully functional coding agent.</p>
+</div>
+<div class="paragraph">
+<p>Each tool is just a simple static method. Here&#8217;s <code>read</code> for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">static String toolRead(JsonNode args) throws IOException {
+    var lines = readAllLines(Path.of(args.get("path").asText()));
+    int offset = args.path("offset").asInt(0), limit = args.path("limit").asInt(lines.size());
+    var sb = new StringBuilder();
+    for (int i = offset; i &lt; Math.min(offset + limit, lines.size()); i++)
+        sb.append("%4d| %s%n".formatted(i + 1, lines.get(i)));
+    return sb.toString();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>No abstractions. No interfaces. Just read the file, format it, return a string.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_agent_loop">The Agent Loop</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The core loop fits in about 30 lines. Here&#8217;s the essence:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">while (true) {
+    var response = callApi(messages, systemPrompt);
+    var content = response.get("content");
+    var toolResults = JSON.createArrayNode();
+
+    for (var block : content) {
+        if ("text".equals(block.get("type").asText()))
+            // print it
+
+        if ("tool_use".equals(block.get("type").asText())) {
+            var result = runTool(block.get("name").asText(), block.get("input"));
+            toolResults.add(/* ... result ... */);
+        }
+    }
+
+    messages.add(/* assistant response */);
+    if (toolResults.isEmpty()) break;  // done!
+    messages.add(/* tool results as user message */);
+    // loop again — let the LLM decide what's next
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The LLM drives the interaction. It decides which tools to call, in what order, and when it&#8217;s done. Your code just executes.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_api_call">The API Call</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The API integration is just <code>HttpURLConnection</code> — no HTTP client library needed. Build a JSON body, POST it, parse the response. About 20 lines:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">var conn = (HttpURLConnection) URI.create(API_URL).toURL().openConnection();
+conn.setRequestMethod("POST");
+conn.setDoOutput(true);
+conn.setRequestProperty("Content-Type", "application/json");
+conn.setRequestProperty("anthropic-version", "2023-06-01");
+conn.setRequestProperty("x-api-key", getenv("ANTHROPIC_API_KEY"));
+
+try (var os = conn.getOutputStream()) {
+    os.write(JSON.writeValueAsBytes(body));
+}
+var response = JSON.readTree(conn.getInputStream());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Java 25&#8217;s module imports (<code>import module java.base</code>) plus records and pattern matching keep the code concise. Java isn&#8217;t verbose anymore — it&#8217;s just&#8230;&#8203; Java.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_python_vs_java_side_by_side">Python vs Java: Side by Side</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The original Python version is ~250 lines with zero dependencies (using <code>json</code> and <code>urllib</code> from the stdlib). The Java version is ~260 lines with one dependency (Jackson, because while <code>java.net.http</code> is built-in, Java&#8217;s stdlib doesn&#8217;t include a JSON parser — the one thing I&#8217;d love to see change).</p>
+</div>
+<div class="paragraph">
+<p>Both are remarkably similar in structure. The same tool definitions, same loop, same API calls. If anything, Java&#8217;s <code>switch</code> expressions and <code>String.formatted()</code> make some parts <em>more</em> readable than the Python equivalent.</p>
+</div>
+<div class="paragraph">
+<p>The key takeaway: <strong>this is not a language problem</strong>. Building an AI agent is an architecture pattern, and it&#8217;s dead simple in any language.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_it">Running It</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">export ANTHROPIC_API_KEY="your-key"
+jbang nanocode@maxandersen</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s <a href="https://www.jbang.dev">JBang</a> fetching the script directly from GitHub and running it. No build tool, no project setup, no compilation step. Or use OpenRouter to access any model:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">export OPENROUTER_API_KEY="your-key"
+export MODEL="openai/gpt-4.1"
+jbang nanocode@maxandersen</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_but_what_about_production">But What About Production?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>nanocode</code> is deliberately minimal. It&#8217;s a teaching tool. There&#8217;s no streaming, no token counting, no retry logic, no permission system, no context window management, no MCP support, etc.</p>
+</div>
+<div class="paragraph">
+<p>For real applications, you&#8217;d want something like <a href="https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.html">Quarkus LangChain4j</a> which gives you:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Declarative AI services</strong> — define your agent as a Java interface with annotations, let the framework handle the plumbing</p>
+</li>
+<li>
+<p><strong>Automatic tool registration</strong> — annotate methods with <code>@Tool</code> and they&#8217;re available to the LLM, type-safe with proper descriptions</p>
+</li>
+<li>
+<p><strong>Multiple LLM providers</strong> — swap between Anthropic, OpenAI, Ollama, and others with configuration, no code changes</p>
+</li>
+<li>
+<p><strong>Guardrails and safety</strong> — input/output guardrails to validate what goes in and out</p>
+</li>
+<li>
+<p><strong>RAG support</strong> — built-in retrieval augmented generation with document ingestion and embedding stores</p>
+</li>
+<li>
+<p><strong>Observability</strong> — metrics, tracing, and logging out of the box</p>
+</li>
+<li>
+<p><strong>MCP (Model Context Protocol)</strong> — connect to external tool servers</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s what the <code>nanocode</code> tools would look like as Quarkus LangChain4j tools:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@ApplicationScoped
+public class CodingTools {
+
+    @Tool("Read a file with line numbers")
+    String readFile(String path, @Optional int offset, @Optional int limit) {
+        // same implementation, but now type-safe and auto-registered
+    }
+
+    @Tool("Run a shell command")
+    String bash(String command) {
+        // ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And your agent becomes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">@RegisterAiService(tools = CodingTools.class)
+public interface CodingAgent {
+
+    @SystemMessage("Concise coding assistant. cwd: {cwd}")
+    String chat(@UserMessage String message);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That&#8217;s it. The framework handles the tool loop, message history, API calls, error handling, and retries. You focus on what matters: the tools and the prompt.</p>
+</div>
+<div class="paragraph">
+<p>The point of <code>nanocode</code> isn&#8217;t to replace these frameworks — it&#8217;s to show you what&#8217;s <em>inside</em> them. Once you understand the 260-line version, the frameworks make a lot more sense.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_try_it">Try It</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The source is at <a href="https://github.com/maxandersen/nanocode">github.com/maxandersen/nanocode</a>. Read it, run it, break it, extend it. It&#8217;s a great way to understand how tools like Claude Code, Cursor, and Co Pilot work under the hood.</p>
+</div>
+<div class="paragraph">
+<p>And if you want to build something serious with Java and AI, check out <a href="https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.html">Quarkus LangChain4j</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Max Rydahl Andersen</p>
+</li>
+</ul>
+</div>
+</div>
+</div><div style="margin-top: 50px; font-style: italic;"><strong><a href="https://xam.dk/blog/nanocode-coding-agent-in-260-lines-of-java/">Keep reading</a>.</strong></div><br /> <br />...
 +
 https://xam.dk/blog/nanocode-coding-agent-in-260-lines-of-java/[Read further^]
 
 Announcing TamboUI (2026-02-18)::
-This blog post is co-authored by Cédric Champeau (Micronaut) and Max Rydahl Andersen (Quarkus), and cross-posted on our respective personal blogs. Today we are excited to announce TamboUI, an open-source Terminal UI framework for the Java ecosystem!...
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This blog post is co-authored by <a href="https://melix.github.io/blog/2026/02/17-announcing-tamboui.html">Cédric Champeau</a> (Micronaut) and <a href="https://xam.dk/blog/announcing-tamboui">Max Rydahl Andersen</a> (Quarkus), and cross-posted on our respective personal blogs.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Today we are excited to announce <a href="https://tamboui.dev/">TamboUI</a>, an open-source Terminal UI framework for the Java ecosystem!</p>
+</div>
+<div class="paragraph">
+<p>The terminal is having a renaissance.</p>
+</div>
+<div class="paragraph">
+<p>AI coding tools live there. Developer workflows are increasingly CLI-first again. Rust has <a href="https://ratatui.rs/">Ratatui</a>. Python has Rich and Textual, Go has Charm, Typescript has OpenTUI. But Java, despite its performance, maturity, and tooling, didn’t have a modern, composable, developer-friendly TUI framework.</p>
+</div>
+<div class="paragraph">
+<p>We thought that should change.</p>
+</div>
+<div class="videoblock">
+<div class="content">
+<iframe width="640" height="480" src="https://www.youtube.com/embed/ERAp2vRHX3M?rel=0" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_it_started">How it started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TamboUI (pronounced like the french word “tambouille”, slang for "cooking up something" or "makeshift creation") was born a bit by accident: a couple months ago, Cédric was <a href="https://bsky.app/profile/melix.champeau.me/post/3m7ulazaogt25">asking about which TUI libraries that tools like Claude Code were using</a>. Max Andersen answered that most likely this was <a href="https://ratatui.rs/">Ratatui</a>, a framework written in Rust. Both thought that it was a bit sad that there was no such library for Java.</p>
+</div>
+<div class="paragraph">
+<p>A few weeks later, <a href="https://bsky.app/profile/melix.champeau.me/post/3mae3pyw4ek25">Cédric did an experiment by asking AI (Claude Code) to port Ratatui to Java</a>. The result was fairly impressive, and the beginning of a collaboration that led to the creation of TamboUI. In fact, Max <a href="https://xam.dk/blog/lets-make-2026-the-year-of-java-in-the-terminal/">gave you a hint last year</a> that this was going to happen.</p>
+</div>
+<div class="paragraph">
+<p>That said, TamboUI is not a Ratatui port nor is it a Textual port. We’ve put a lot of effort in going beyond the initial AI generated port. The library was designed with Java developers in mind, inspired by the good things found in other ecosystems’ approach to TUI frameworks. It offers a multi-layer API: from low-level widget primitives (like Ratatui), to a managed TUI layer with event handling, up to a declarative Toolkit DSL that handles the event loop and rendering thread for you—things that Ratatui doesn’t really cover. This brings the power of Ratatui, Textual or Rich to the Java ecosystem, with the Java touch!</p>
+</div>
+<div class="paragraph">
+<p>Not only that, TamboUI is also <a href="https://www.graalvm.org/latest/reference-manual/native-image/">GraalVM native</a> compatible! This means that you can compile your Java TUI applications as native binaries, making Java a first class citizen in terminal applications development, with low memory footprints and fast startup!</p>
+</div>
+<div class="paragraph">
+<p>If you want to give it a try, the easiest is to run our demos using <a href="https://www.jbang.dev/">JBang</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-shell" data-lang="shell">jbang demos@tamboui</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_try_it_out">Try it out</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>At this stage, the APIs are still unstable and subject to change. TamboUI is developed with the mindset of being framework-agnostic and having as few external dependencies as possible. You can choose between several backends like <a href="https://jline.org/">JLine</a>, <a href="https://aeshell.github.io/">Aesh</a> or the built-in Panama backend. By choosing the latter, you’ll get the best performance while not depending on any external library.</p>
+</div>
+<div class="paragraph">
+<p>Whether you want to build:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a standalone CLI tool</p>
+</li>
+<li>
+<p>an internal developer tool</p>
+</li>
+<li>
+<p>a DevOps utility</p>
+</li>
+<li>
+<p>add a TUI frontend to existing Java tool</p>
+</li>
+<li>
+<p>an AI agent</p>
+</li>
+<li>
+<p>or something entirely new</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Give TamboUI a try and let us know what worked and what could be improved!</p>
+</div>
+<div class="paragraph">
+<p>Check out the documentation at <a href="https://tamboui.dev/docs/main/" class="bare">https://tamboui.dev/docs/main/</a>, join us on <a href="https://tamboui.zulipchat.com">Zulip</a>, or browse the source on <a href="https://github.com/tamboui/tamboui">GitHub</a>. We&#8217;d love your feedback and contributions!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_acknowledgments">Acknowledgments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We would like to thank the following people for their ideas, suggestions and contributions to the creation of first public release of TamboUI (in alphabetical order):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Andrea Peruffo</p>
+</li>
+<li>
+<p>Andres Almiray</p>
+</li>
+<li>
+<p>Charles Moulliard</p>
+</li>
+<li>
+<p>Claus Ibsen</p>
+</li>
+<li>
+<p>Graeme Rocher</p>
+</li>
+<li>
+<p>Guillaume LaForge</p>
+</li>
+<li>
+<p>James Cobb</p>
+</li>
+<li>
+<p>Ståle Pedersen</p>
+</li>
+<li>
+<p>Tako Schotanus</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>and of course to the Ratatui and Textual creators for their inspiration and work.</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Max Rydahl Andersen &amp; Cédric Champeau</p>
+</div>
+</div>
+</div>
+</div>
+</div><div style="margin-top: 50px; font-style: italic;"><strong><a href="https://xam.dk/blog/announcing-tamboui/">Keep reading</a>.</strong></div><br /> <br />...
 +
 https://xam.dk/blog/announcing-tamboui/[Read further^]
-
-2026: The Year of Java in the Terminal (2026-12-30)::
-Look, I&#8217;m going to say something that might sound crazy to some of you: Java deserves to be better in the terminal. And 2026? That&#8217;s going to be the year we fix it! I&#8217;ve been watching people get absolutely amazed by AI terminal applications lately. LLM-powered CLI tools that help you write code, answer questions, generate content—all from your terminal. And you know what they&#8217;re all written in? Python. Rust. Go. Node.js. Everything except Java....
-+
-https://xam.dk/blog/lets-make-2026-the-year-of-java-in-the-terminal/[Read further^]
 
 Quarkus MCP Server: The First Java Server SDK to Support Streamable HTTP! (2025-05-23)::
 The Model Context Protocol (MCP) is taking the developer world by storm, and now, with its latest spec update: Streamable HTTP support has arrived!...
